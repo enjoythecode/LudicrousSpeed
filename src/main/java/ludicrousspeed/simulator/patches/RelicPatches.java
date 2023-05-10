@@ -1,5 +1,6 @@
 package ludicrousspeed.simulator.patches;
 
+import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInsertPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
@@ -41,11 +42,21 @@ public class RelicPatches {
             method = SpirePatch.CONSTRUCTOR
     )
     public static class FastRelicConstructorPatch {
+
+        private static String[] dupe_descriptions = {"So","Many","Things","Set","Descriptions","In","Weird","Places"};
+
         @SpireInsertPatch(loc = 127)
         public static SpireReturn Insert(AbstractRelic _instance, String setId, String imgName, AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx) {
             if (LudicrousSpeedMod.plaidMode) {
                 // we need to set the tier field to avoid NPE
                 _instance.tier = tier;
+                ReflectionHacks.setPrivateFinal(_instance, AbstractRelic.class, "DESCRIPTIONS", dupe_descriptions);
+                /*
+                RelicStrings relicStrings = CardCrawlGame.languagePack.getRelicStrings(this.relicId);
+                relicStrings
+                ReflectionHacks.setPrivateFinal(_instance, AbstractRelic.class, "name", relicStrings.NAME);
+                _instance.DESCRIPTIONS = _instance.relicStrings.DESCRIPTIONS;
+                */
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();

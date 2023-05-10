@@ -10,7 +10,12 @@ import com.megacrit.cardcrawl.screens.CombatRewardScreen;
 import com.megacrit.cardcrawl.screens.DeathScreen;
 import ludicrousspeed.LudicrousSpeedMod;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ScreenPatches {
+    private static final Logger logger = LogManager.getLogger(  ScreenPatches.class.getName());
+
     @SpirePatch(
             clz = CombatRewardScreen.class,
             paramtypez = {SpriteBatch.class},
@@ -47,6 +52,7 @@ public class ScreenPatches {
     public static class DisableDeathScreenpatch {
         public static SpireReturn Prefix(DeathScreen _instance, MonsterGroup monsterGroup) {
             if (LudicrousSpeedMod.plaidMode) {
+                logger.warn("LudicrousSpeed is preventing the DeathScreen constructor!");
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();
