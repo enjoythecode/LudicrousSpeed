@@ -81,10 +81,13 @@ public class ActionSimulator {
                 }
             }
 
-
-//            if (!shouldWaitOnActions()) {
-            ActionSimulator.roomUpdate();
-//            }
+            // SwapTheSpire might have instantly started the game over upon the player taking damage and going to 0 hp, so check if we are still doing anything first
+            if (AbstractDungeon.getCurrMapNode() == null) {
+                return;
+            }
+            
+                ActionSimulator.roomUpdate();
+            
         }
 
         if (actionManager.currentAction == null && !AbstractDungeon.isScreenUp) {

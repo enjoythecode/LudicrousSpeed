@@ -49,9 +49,13 @@ public class DamageActionPatches {
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
-                if (AbstractDungeon.getCurrRoom().monsters.areMonstersBasicallyDead()) {
-                    AbstractDungeon.actionManager.clearPostCombatActions();
+                // SwapTheSpire might have instantly started the game over upon the player taking damage and going to 0 hp, so check if we are still doing anything first
+                if (AbstractDungeon.getCurrMapNode() != null) {
+                    if (AbstractDungeon.getCurrRoom().monsters.areMonstersBasicallyDead()) {
+                        AbstractDungeon.actionManager.clearPostCombatActions();
+                    }
                 }
+                
 
                 return SpireReturn.Return(null);
             }
